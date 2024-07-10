@@ -7,7 +7,7 @@ using namespace std;
 
 namespace AOA
 {
-    int AOAProtocalHandler::SwitchToAccessoryMode(libusb_device_handle *dev)
+    int AOAProtocolHandler::SwitchToAccessoryMode(libusb_device_handle *dev)
     {
         return libusb_control_transfer(dev,
                                        AOA_CTRL_OUT | LIBUSB_RECIPIENT_DEVICE,
@@ -18,7 +18,7 @@ namespace AOA
                                        0,
                                        500);
     }
-    int AOAProtocalHandler::SetAudioMode(libusb_device_handle *dev, bool mode)
+    int AOAProtocolHandler::SetAudioMode(libusb_device_handle *dev, bool mode)
     {
         int value = mode ? 1 : 0;
         return libusb_control_transfer(dev,
@@ -31,7 +31,7 @@ namespace AOA
                                        500);
     }
 
-    int AOAProtocalHandler::GetProtocol(libusb_device_handle *device_handle, uint16_t *protocol)
+    int AOAProtocolHandler::GetProtocol(libusb_device_handle *device_handle, uint16_t *protocol)
     {
         return libusb_control_transfer(device_handle,
                                        AOA_CTRL_IN | LIBUSB_RECIPIENT_DEVICE, // bmRequestType
@@ -43,7 +43,7 @@ namespace AOA
                                        500);                                  // timeout 500ms
     }
 
-    int AOAProtocalHandler::SetProtocol(libusb_device_handle *dev, int idx, const char *buffer)
+    int AOAProtocolHandler::SetProtocol(libusb_device_handle *dev, int idx, const char *buffer)
     {
         return libusb_control_transfer(dev,
                                        AOA_CTRL_OUT | LIBUSB_RECIPIENT_DEVICE,
@@ -55,19 +55,19 @@ namespace AOA
                                        500); // timeout
     }
 
-    AOAProtocalHandler::AOAProtocalHandler(libusb_device *device)
+    AOAProtocolHandler::AOAProtocolHandler(libusb_device *device)
     {
         libusb_device_descriptor desc;
         // increase the reference count of the device
         device_ = device;
         libusb_ref_device(device_);
     }
-    AOAProtocalHandler::~AOAProtocalHandler()
+    AOAProtocolHandler::~AOAProtocolHandler()
     {
         libusb_unref_device(device_);
         device_ = nullptr;
     }
-    bool AOAProtocalHandler::EnableAccesoryMode()
+    bool AOAProtocolHandler::EnableAccesoryMode()
     {
         int ret = 0;
         libusb_device_descriptor desc = {0};

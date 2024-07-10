@@ -96,7 +96,7 @@ int main()
         return 1;
     }
     {
-        AOA::AOAProtocalHandler aoa_handler(target_device);
+        AOA::AOAProtocolHandler aoa_handler(target_device);
         bool enabled = aoa_handler.EnableAccesoryMode();
         if (!enabled)
         {

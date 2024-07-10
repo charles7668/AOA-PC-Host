@@ -54,7 +54,7 @@
 
 namespace AOA
 {
-    class AOAProtocalHandler
+    class AOAProtocolHandler
     {
     private:
         libusb_device *device_;
@@ -64,8 +64,8 @@ namespace AOA
         int SwitchToAccessoryMode(libusb_device_handle *device_handle);
 
     public:
-        AOAProtocalHandler(libusb_device *device);
-        ~AOAProtocalHandler();
+        AOAProtocolHandler(libusb_device *device);
+        ~AOAProtocolHandler();
 
         bool EnableAccesoryMode();
     };
