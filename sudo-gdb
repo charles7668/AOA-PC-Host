@@ -1,0 +1,9 @@
+#!/bin/sh
+password="your-pass-word"
+echo $password
+if [ $password = "your-pass-word" ]; then
+    echo "Please set your password in the script"
+    exit 1
+fi
+echo $password | sudo -S echo "" > /dev/null
+sudo /usr/bin/gdb "$@"

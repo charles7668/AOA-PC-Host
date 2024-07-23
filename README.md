@@ -2,6 +2,7 @@
 
 - [AOA-PC-Host](#aoa-pc-host)
   - [Install Dependencies](#install-dependencies)
+  - [Change sudo password](#change-sudo-password)
   - [Host Side Q\&A](#host-side-qa)
     - [Open USB Returns -3](#open-usb-returns--3)
     - [Checking Device PID and VID](#checking-device-pid-and-vid)
@@ -20,6 +21,14 @@ sudo apt update
 sudo apt install alsa-base, alsa-utils, alsa-source,libasound2-dev
 sudo apt install libusb-1.0-0-dev
 sudo apt install build-essential
+```
+
+## Change sudo password
+
+open `sudo-gdb` change password
+
+```
+password="your-pass-word"
 ```
 
 ## Host Side Q&A
