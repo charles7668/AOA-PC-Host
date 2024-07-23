@@ -100,18 +100,18 @@ namespace AOA
         }
 
         bool setState = true;
-        setState &= 0 == SetProtocol(device_handle, AOA_PROTO_MANUFACTURE_INDEX, ADK2012_MANUFACTURE_STRING);
-        setState &= 0 == SetProtocol(device_handle, AOA_PROTO_MODEL_INDEX, ADK2012_MODEL_STRING);
-        setState &= 0 == SetProtocol(device_handle, AOA_PROTO_DESCRIPTION_INDEX, ADK2012_DESCRIPTION_STRING);
-        setState &= 0 == SetProtocol(device_handle, AOA_PROTO_VERSION_INDEX, ADK2012_VERSION_STRING);
-        setState &= 0 == SetProtocol(device_handle, AOA_PROTO_URI_INDEX, ADK2012_URI_STRING);
-        setState &= 0 == SetProtocol(device_handle, AOA_PROTO_SERIAL_INDEX, ADK2012_SERIAL_STRING);
+        SetProtocol(device_handle, AOA_PROTO_MANUFACTURE_INDEX, ADK2012_MANUFACTURE_STRING);
+        SetProtocol(device_handle, AOA_PROTO_MODEL_INDEX, ADK2012_MODEL_STRING);
+        SetProtocol(device_handle, AOA_PROTO_DESCRIPTION_INDEX, ADK2012_DESCRIPTION_STRING);
+        SetProtocol(device_handle, AOA_PROTO_VERSION_INDEX, ADK2012_VERSION_STRING);
+        SetProtocol(device_handle, AOA_PROTO_URI_INDEX, ADK2012_URI_STRING);
+        SetProtocol(device_handle, AOA_PROTO_SERIAL_INDEX, ADK2012_SERIAL_STRING);
 
         if (protocol == 2)
         {
-            setState &= 0 == SetAudioMode(device_handle, true);
+            // SetAudioMode(device_handle, true);
         }
-        setState &= 0 == SwitchToAccessoryMode(device_handle);
+        SwitchToAccessoryMode(device_handle);
 
         if (!setState)
         {

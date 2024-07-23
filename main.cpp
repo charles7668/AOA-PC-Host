@@ -4,6 +4,7 @@
 #include "aoa.h"
 #include <unistd.h>
 #include "defer.hpp"
+#include <string.h>
 
 using namespace std;
 
@@ -64,10 +65,49 @@ libusb_device *find_aoa_device(libusb_device **dev_list, int dev_count)
     return target_device;
 }
 
+int get_endpoint(libusb_device *device, uint8_t &ep_in, uint8_t &ep_out)
+{
+    libusb_config_descriptor *desc;
+    int ret = libusb_get_active_config_descriptor(device, &desc);
+    if (ret != 0)
+    {
+        cerr << "Error getting device descriptor: " << libusb_error_name(ret) << "\n";
+        return ret;
+    }
+    for (int j = 0; j < desc->bNumInterfaces; j++)
+    {
+        const libusb_interface *interface = &desc->interface[j];
+        for (int k = 0; k < interface->num_altsetting; k++)
+        {
+            const libusb_interface_descriptor &altsetting = interface->altsetting[j];
+            for (int k = 0; k < altsetting.bNumEndpoints; ++k)
+            {
+                const libusb_endpoint_descriptor &endpoint = altsetting.endpoint[k];
+                if (endpoint.bmAttributes == LIBUSB_TRANSFER_TYPE_BULK)
+                {
+                    if (endpoint.bEndpointAddress & LIBUSB_ENDPOINT_IN)
+                    {
+                        cout << "Found IN endpoint: " << (int)endpoint.bEndpointAddress << "\n";
+                        ep_in = endpoint.bEndpointAddress;
+                    }
+                    else
+                    {
+                        cout << "Found OUT endpoint: " << (int)endpoint.bEndpointAddress << "\n";
+                        ep_out = endpoint.bEndpointAddress;
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
+
 int main()
 {
-    vector<USBIdentity> support_devices{
-        USBIdentity{0x18D1, 0xD002}};
+    vector<USBIdentity> support_devices(
+        {USBIdentity{0xd002 , 0x18d1},
+        USBIdentity{0x2d01 , 0x18d1}}
+    );
 
     libusb_context *ctx = nullptr;
     int ret = libusb_init(&ctx);
@@ -128,6 +168,39 @@ int main()
         return 1;
     }
     cout << "Found AOA device: VID: " << desc.idVendor << " PID: " << desc.idProduct << "\n";
+    uint8_t ep_in = 0, ep_out = 0;
+    ret = get_endpoint(target_device, ep_in, ep_out);
+    if (ret != 0)
+    {
+        return 1;
+    }
+    unsigned char data[4096]{0};
+    int actual_length = 0;
+    libusb_device_handle *handle;
+    ret = libusb_open(target_device, &handle);
+    if (ret != 0)
+    {
+        cerr << "Error opening device: " << libusb_error_name(ret) << "\n";
+        return 1;
+    }
+    cout << "device connected" << "\n";
+    while (true)
+    {
+        int transfer_ret = libusb_bulk_transfer(handle, ep_in, data, sizeof(data), &actual_length, 1000);
+        if (transfer_ret == LIBUSB_ERROR_NO_DEVICE)
+        {
+            cout << "Device disconnected\n";
+            break;
+        }
+        if(transfer_ret == 0)
+        {
+            cout << "Transfer ret: " << transfer_ret << " actual length: " << actual_length << "\n";
+            cout << (char*)data << endl;
+            memset(data , 4096 , 0);
+        }
+
+    }
+    libusb_close(handle);
     libusb_free_device_list(dev_lists, 1);
     return 0;
 }

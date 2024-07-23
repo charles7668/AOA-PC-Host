@@ -42,10 +42,10 @@
  *   Model       "DemoKit"
  *   Version     "2.0"
  */
-#define ADK2012_MANUFACTURE_STRING ("Google, Inc.")
-#define ADK2012_MODEL_STRING ("DemoKit")
+#define ADK2012_MANUFACTURE_STRING ("Hello Inc")
+#define ADK2012_MODEL_STRING ("HelloWorldModel")
 #define ADK2012_DESCRIPTION_STRING ("DemoKit Arduino Board")
-#define ADK2012_VERSION_STRING ("2.0")
+#define ADK2012_VERSION_STRING ("1.0")
 #define ADK2012_URI_STRING ("http://www.android.com")
 #define ADK2012_SERIAL_STRING ("0000000012345678")
 
